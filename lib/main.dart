@@ -85,7 +85,23 @@ class _SelectionScreenState extends State<SelectionScreen> {
                     isExpanded: true,
                     hint: const Text("Выберите элемент"),
                     items: itemsMap[selectedCategory!]!.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-                    onChanged: (val) => setState(() { selectedItem = val; }),
+                        onChanged: (val) {
+      setState(() {
+        selectedItem = val;
+      });
+
+      if (val == 'УРОВ-110') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Scaffold(
+              appBar: AppBar(title: const Text('УРОВ-110')),
+              body: SfPdfViewer.asset('urov110.pdf'),
+            ),
+          ),
+        );
+      }
+    },
                   ),
                 ],
 
