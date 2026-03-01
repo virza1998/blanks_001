@@ -35,8 +35,10 @@ class _SelectionScreenState extends State<SelectionScreen> {
   final List<String> categories = ['ВВ оборудование', 'РЗА'];
   
   final Map<String, List<String>> itemsMap = {
+    // добавляй сюда ВВ оборудование
     'ВВ оборудование': ['В-220 Х', 'В-220 К', 'СВ-220', 'ВЛ-220 Х', 'ВЛ-220 К'],      // добавляй сюда ВВ оборудование
-    'РЗА': ['УРОВ-220', 'УРОВ-110'],      // добавляй сюда устройства РЗА
+    // добавляй сюда устройства РЗА
+    'РЗА': ['УРОВ-220', 'УРОВ-110', 'ДЗШ-110'],      // добавляй сюда устройства РЗА
   };
 
   // соответствие устройства РЗА - файлу pdf
@@ -45,6 +47,8 @@ class _SelectionScreenState extends State<SelectionScreen> {
     'Вывод_УРОВ-110': 'assets/pdf/urov110vivod.pdf',
     'Ввод_УРОВ-220': 'assets/pdf/urov220wod.pdf',
     'Вывод_УРОВ-220': 'assets/pdf/urov220vivod.pdf',      // добавляй сюда новые связи РЗА и pdf
+    'Ввод_ДЗШ-110': 'assets/pdf/dzsh110wod.pdf',
+    'Вывод_ДЗШ-110': 'assets/pdf/dzsh110vivod.pdf',
   };
 
   @override
