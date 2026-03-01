@@ -1,3 +1,4 @@
+import 'package:syncfusion_flutter_pdfviewer/syncfusion_flutter_pdfviewer.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const WorkApp());
