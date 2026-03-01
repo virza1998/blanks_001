@@ -35,14 +35,16 @@ class _SelectionScreenState extends State<SelectionScreen> {
   final List<String> categories = ['ВВ оборудование', 'РЗА'];
   
   final Map<String, List<String>> itemsMap = {
-    'ВВ оборудование': ['В-220 Х', 'В-220 К', 'СВ-220', 'ВЛ-220 Х', 'ВЛ-220 К'],
-    'РЗА': ['НВЧЗ ВЛ-220 Х', 'КСЗ ВЛ-220 Х', 'ДФЗ ВЛ-220 К', 'КСЗ ВЛ-220 К', 'АПВ В-220 Х', 'АПВ В-220 К', 'УРОВ-110'],
+    'ВВ оборудование': ['В-220 Х', 'В-220 К', 'СВ-220', 'ВЛ-220 Х', 'ВЛ-220 К'],      // добавляй сюда ВВ оборудование
+    'РЗА': ['УРОВ-220', 'УРОВ-110'],      // добавляй сюда устройства РЗА
   };
 
-  // --- СПИСОК PDF ФАЙЛОВ ---
+  // соответствие устройства РЗА - файлу pdf
   final Map<String, String> pdfFiles = {
-    'УРОВ-110': 'assets/pdf/urov110wod.pdf',      // Путь к файлу "ввод"
-    'УРОВ-110 ВЫВОД': 'assets/pdf/urov110viuvod.pdf', // путь к файлу "вывод"
+    'Ввод_УРОВ-110': 'assets/pdf/urov110wod.pdf',
+    'Вывод_УРОВ-110': 'assets/pdf/urov110vivod.pdf',
+    'Ввод_УРОВ-220': 'assets/pdf/urov220wod.pdf',
+    'Вывод_УРОВ-220': 'assets/pdf/urov220vivod.pdf',      // добавляй сюда новые связи РЗА и pdf
   };
 
   @override
@@ -92,27 +94,25 @@ class _SelectionScreenState extends State<SelectionScreen> {
                     isExpanded: true,
                     hint: const Text("Выберите элемент"),
                     items: itemsMap[selectedCategory!]!.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-                    onChanged: (val) {
-                      setState(() { selectedItem = val; });
+    onChanged: (val) {
+      setState(() { selectedItem = val; });
 
-                      if (val == 'УРОВ-110' && selectedType != null) {
-                        String fileName = (selectedType == 'Вывод') 
-                            ? 'assets/pdf/urov110vivod.pdf' 
-                            : 'assets/pdf/urov110wod.pdf';
+      String key = "${selectedType}_$val";
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Scaffold(
-                              appBar: AppBar(title: Text('$selectedType $val')),
-                              body: PdfViewer.asset(fileName),
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  ), // Закрывает DropdownButton
-                ], // Закрывает список внутри if (selectedCategory != null)
+      if (pdfFiles.containsKey(key)) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Scaffold(
+              appBar: AppBar(title: Text('$selectedType $val')),
+              body: PdfViewer.asset(pdfFiles[key]!),
+            ),
+          ),
+        );
+      }
+    },
+  ), // <--- ВОТ ЭТА СКОБКА (закрывает DropdownButton)
+], // <--- И ЭТА (закрывает список внутри if)
 
 
 
