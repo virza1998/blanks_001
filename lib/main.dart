@@ -95,21 +95,26 @@ class _SelectionScreenState extends State<SelectionScreen> {
                     onChanged: (val) {
                       setState(() { selectedItem = val; });
 
-                      // АВТОМАТИЧЕСКОЕ ОТКРЫТИЕ PDF
-                      if (val != null && pdfFiles.containsKey(val)) {
+                      if (val == 'УРОВ-110' && selectedType != null) {
+                        String fileName = (selectedType == 'Вывод') 
+                            ? 'assets/pdf/urov110vivod.pdf' 
+                            : 'assets/pdf/urov110wod.pdf';
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => Scaffold(
-                              appBar: AppBar(title: Text(val)),
-                              body: PdfViewer.asset(pdfFiles[val]!),
+                              appBar: AppBar(title: Text('$selectedType $val')),
+                              body: PdfViewer.asset(fileName),
                             ),
                           ),
                         );
                       }
                     },
-                  ),
-                ],
+                  ), // Закрывает DropdownButton
+                ], // Закрывает список внутри if (selectedCategory != null)
+
+
 
                 const SizedBox(height: 40),
                 if (selectedItem != null && selectedType != null)
