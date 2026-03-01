@@ -10,9 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  syncfusion_flutter_pdfviewer: ^26.1.35
-
-
+  pdfrx: any
 
 dev_dependencies:
   flutter_test:
