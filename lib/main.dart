@@ -97,7 +97,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
           MaterialPageRoute(
             builder: (context) => Scaffold(
               appBar: AppBar(title: const Text('УРОВ-110')),
-              body: SfPdfViewer.asset('urov110.pdf'),
+              body: PdfViewer.asset('urov110.pdf'),
             ),
           ),
         );
