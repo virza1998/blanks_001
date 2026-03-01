@@ -10,10 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  syncfusion_flutter_pdfviewer:
-    git:
-      url: https://github.com
-      path: packages/syncfusion_flutter_pdfviewer
+  syncfusion_flutter_pdfviewer: ^26.1.35
+
 
 
 dev_dependencies:
