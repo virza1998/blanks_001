@@ -40,10 +40,9 @@ class _SelectionScreenState extends State<SelectionScreen> {
   };
 
   // --- СПИСОК PDF ФАЙЛОВ ---
-  // Просто добавляй сюда новые строки по образцу
   final Map<String, String> pdfFiles = {
-    'УРОВ-110': 'urov110.pdf',
-    // 'СВ-220': 'sv220.pdf', // Пример для будущего
+    'УРОВ-110': 'assets/pdf/urov110wod.pdf',      // Путь к файлу "ввод"
+    'УРОВ-110 ВЫВОД': 'assets/pdf/urov110viuvod.pdf', // путь к файлу "вывод"
   };
 
   @override
