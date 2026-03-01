@@ -1,5 +1,4 @@
 import 'package:pdfrx/pdfrx.dart';
-
 import 'package:flutter/material.dart';
 
 void main() => runApp(const WorkApp());
@@ -28,15 +27,23 @@ class SelectionScreen extends StatefulWidget {
 }
 
 class _SelectionScreenState extends State<SelectionScreen> {
-  String? selectedType;     // Ввод / Вывод
-  String? selectedCategory; // ВВ оборудование / РЗА
-  String? selectedItem;     // Конкретный аппарат
+  String? selectedType;
+  String? selectedCategory;
+  String? selectedItem;
 
   final List<String> types = ['Ввод', 'Вывод'];
   final List<String> categories = ['ВВ оборудование', 'РЗА'];
+  
   final Map<String, List<String>> itemsMap = {
     'ВВ оборудование': ['В-220 Х', 'В-220 К', 'СВ-220', 'ВЛ-220 Х', 'ВЛ-220 К'],
     'РЗА': ['НВЧЗ ВЛ-220 Х', 'КСЗ ВЛ-220 Х', 'ДФЗ ВЛ-220 К', 'КСЗ ВЛ-220 К', 'АПВ В-220 Х', 'АПВ В-220 К', 'УРОВ-110'],
+  };
+
+  // --- СПИСОК PDF ФАЙЛОВ ---
+  // Просто добавляй сюда новые строки по образцу
+  final Map<String, String> pdfFiles = {
+    'УРОВ-110': 'urov110.pdf',
+    // 'СВ-220': 'sv220.pdf', // Пример для будущего
   };
 
   @override
@@ -48,7 +55,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('psk1.jpg'), // Проверь, что тут JPG или jpg как на диске!
+            image: AssetImage('psk1.jpg'),
             fit: BoxFit.cover,
           ),
         ),
@@ -86,23 +93,22 @@ class _SelectionScreenState extends State<SelectionScreen> {
                     isExpanded: true,
                     hint: const Text("Выберите элемент"),
                     items: itemsMap[selectedCategory!]!.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-                        onChanged: (val) {
-      setState(() {
-        selectedItem = val;
-      });
+                    onChanged: (val) {
+                      setState(() { selectedItem = val; });
 
-      if (val == 'УРОВ-110') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Scaffold(
-              appBar: AppBar(title: const Text('УРОВ-110')),
-              body: PdfViewer.asset('urov110.pdf'),
-            ),
-          ),
-        );
-      }
-    },
+                      // АВТОМАТИЧЕСКОЕ ОТКРЫТИЕ PDF
+                      if (val != null && pdfFiles.containsKey(val)) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Scaffold(
+                              appBar: AppBar(title: Text(val)),
+                              body: PdfViewer.asset(pdfFiles[val]!),
+                            ),
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ],
 
@@ -118,7 +124,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                     ),
                     child: Column(
                       children: [
-                        Text("ИТОГ:", style: TextStyle(color: Colors.greenAccent.shade100, fontWeight: FontWeight.bold)),
+                        Text("ВЫБРАНО:", style: TextStyle(color: Colors.greenAccent.shade100, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 10),
                         Text("$selectedType — $selectedItem", 
                              textAlign: TextAlign.center,
