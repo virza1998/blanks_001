@@ -103,7 +103,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                           MaterialPageRoute(
                             builder: (context) => Scaffold(
                               appBar: AppBar(title: Text('$selectedType $selection')),
-                              body: PdfViewer.asset(Uri.encodeFull(AppData.pdfFiles[key]!)),
+                              body: PdfViewer.asset(AppData.pdfFiles[key]!),
                             ),
                           ),
                         );
