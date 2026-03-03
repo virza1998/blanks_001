@@ -92,33 +92,60 @@ class _SelectionScreenState extends State<SelectionScreen> {
                   onChanged: (val) => setState(() { selectedCategory = val; selectedItem = null; }),
                 ),
 
-                const SizedBox(height: 20),
-                if (selectedCategory != null) ...[
-                  const Text("Объект:", style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)),
-                  DropdownButton<String>(
-                    value: selectedItem,
-                    isExpanded: true,
-                    hint: const Text("Выберите элемент"),
-                    items: itemsMap[selectedCategory!]!.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-    onChanged: (val) {
-      setState(() { selectedItem = val; });
+const SizedBox(height: 20),
+if (selectedCategory != null) ...[
+  const Text("Объект (введите название):", style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)),
+  const SizedBox(height: 10),
+  
+  // ВИДЖЕТ ПОИСКА
+  Autocomplete<String>(
+        key: ValueKey(selectedCategory), 
+    optionsBuilder: (TextEditingValue textEditingValue) {
+      if (textEditingValue.text == '') {
+        return const Iterable<String>.empty();
+      }
+      // Фильтруем список объектов по введенным буквам
+      return itemsMap[selectedCategory!]!.where((String option) {
+        return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
+      });
+    },
+    onSelected: (String selection) {
+      setState(() { selectedItem = selection; });
 
-      String key = "${selectedType}_$val";
+      String key = "${selectedType}_$selection";
 
       if (pdfFiles.containsKey(key)) {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Scaffold(
-              appBar: AppBar(title: Text('$selectedType $val')),
-              body: PdfViewer.asset(pdfFiles[key]!),
+              appBar: AppBar(title: Text('$selectedType $selection')),
+              // ИСПОЛЬЗУЕМ Uri.encodeFull ДЛЯ РУССКИХ ИМЕН С ПРОБЕЛАМИ
+              body: PdfViewer.asset(Uri.encodeFull(pdfFiles[key]!)),
             ),
           ),
         );
       }
     },
-  ), // <--- ВОТ ЭТА СКОБКА (закрывает DropdownButton)
-], // <--- И ЭТА (закрывает список внутри if)
+    // Настройка внешнего вида поля ввода
+    fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
+      return TextField(
+        controller: controller,
+        focusNode: focusNode,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: 'Начните вводить, например: УРОВ',
+          hintStyle: TextStyle(color: Colors.grey.shade500),
+          filled: true,
+          fillColor: Colors.white.withOpacity(0.1),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+          suffixIcon: const Icon(Icons.search, color: Colors.amber),
+        ),
+      );
+    },
+  ),
+],
+
 
 
 
