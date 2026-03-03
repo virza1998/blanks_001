@@ -1,6 +1,6 @@
 import 'package:pdfrx/pdfrx.dart';
 import 'package:flutter/material.dart';
-
+import 'app_data.dart'; // <--- имена ВВ, РЗА и их файлы pdf
 void main() => runApp(const WorkApp());
 
 class WorkApp extends StatelessWidget {
