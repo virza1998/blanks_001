@@ -60,9 +60,9 @@ class _SelectionScreenState extends State<SelectionScreen> {
                   value: selectedType,
                   isExpanded: true,
                   hint: const Text("Выберите тип"),
-                  items: types.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-                  onChanged: (val) => setState(() { selectedType = val; }),
-                ),
+                    items: types.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+  onChanged: (val) => setState(() { selectedType = val; selectedItem = null; }), // Добавь selectedItem = null; здесь
+),
                 
                 const SizedBox(height: 20),
                 const Text("Категория:", style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)),
@@ -81,15 +81,23 @@ class _SelectionScreenState extends State<SelectionScreen> {
                   
                   Autocomplete<String>(
                     key: ValueKey(selectedCategory), 
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text == '') {
-                        return const Iterable<String>.empty();
-                      }
-                      // Берем данные из AppData
-                      return AppData.itemsMap[selectedCategory!]!.where((String option) {
-                        return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
-                      });
-                    },
+                   optionsBuilder: (TextEditingValue textEditingValue) {
+  if (textEditingValue.text == '' || selectedType == null) {
+    return const Iterable<String>.empty();
+  }
+// 1. Берем все объекты из категории (РЗА или ВВ)
+  return AppData.itemsMap[selectedCategory!]!.where((String option) {
+    // 2. Проверяем, содержит ли название текст из поиска
+    bool matchesSearch = option.toLowerCase().contains(textEditingValue.text.toLowerCase());
+    
+    // 3. ПРОВЕРКА: Существует ли ключ для этого типа (Ввод или Вывод) в pdfFiles?
+    // Это отсечет "Вывод", если выбран "Ввод", и наоборот.
+    String key = "${selectedType}_$option";
+    bool fileExists = AppData.pdfFiles.containsKey(key);
+    
+    return matchesSearch && fileExists;
+  });
+},
                     onSelected: (String selection) {
                       setState(() { selectedItem = selection; });
 
